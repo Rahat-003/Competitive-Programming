@@ -1,0 +1,58 @@
+
+// vector<int> v[100002]; |
+
+struct LCA{
+    vector<int> L,par;
+    vector<vector<int>> table;
+    int sz,n;
+
+    void FN(int u,int a){
+        L[u] = L[a]+1;
+        par[u] = a;
+        for(int i:v[u]){
+            if(i==a)  continue;
+            FN(i,u);
+        }
+    }
+
+    void build(){
+        for(int i = 1; i<=n; i++)   table[i][0] = par[i];
+        for(int i = 1; i<=sz; i++){
+            for(int j = 1; j<=n; j++){
+                if(table[j][i-1]!=0)
+                table[j][i] = table[table[j][i-1]][i-1];
+            }
+        }
+    }
+
+    LCA(int N,int root){
+        L = vector<int> (N+2,0);
+        par = L;
+        sz = log2(N) ;
+        n = N;
+        for(int i = 0; i<=N; i++)
+            table.pb(vector<int>(sz+2,0));
+        FN(root,0);
+        build();
+    }
+
+    int lca(int a,int b){
+    /// LCA of node a and b
+
+        if(L[a]>L[b])   swap(a,b);
+        for(int i = sz; i>=0; i--)
+            if(L[b]-(1<<i)>=L[a])   b = table[b][i];
+        for(int i = sz; i>=0; i--)
+            if(table[a][i]!=0 && table[a][i]!=table[b][i])
+                a = table[a][i],b = table[b][i];
+
+        if(a==b)    return a;
+        return par[a];
+    }
+
+    int dist(int a,int b){
+        if(L[a]>L[b])   swap(a,b);
+        int p = lca(a,b);
+        return L[a]+L[b]-2*L[p];
+    }
+};

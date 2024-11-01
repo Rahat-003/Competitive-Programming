@@ -1,0 +1,23 @@
+|
+struct BIT{
+    int SIZE;
+    vector<int> TREE1,TREE2;
+    BIT(int N){
+        SIZE = N;
+        TREE1 = vector<int> (SIZE+5,0);    TREE2 = TREE1;
+    }
+
+    void add(vector<int> &ar,int i,int val){
+        for(;i<=SIZE;i+=i&-i)  ar[i]+=val;
+    }
+    void update(int l,int r,int val){
+        add(TREE1,l,val);       add(TREE1,r+1,-val);
+        add(TREE2,l,(l-1)*val); add(TREE2,r+1,-r*val);
+    }
+    int prefix_sum(vector<int> &ar,int i){
+        int tot = 0;    for(;i;i-=i&-i) tot+=ar[i];
+        return tot;
+    }
+    int sum(int i){ return prefix_sum(TREE1,i)*i - prefix_sum(TREE2,i); }
+    int query(int l,int r){ return sum(r)-sum(l-1); }
+};

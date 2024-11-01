@@ -1,0 +1,47 @@
+#include                        <bits/stdc++.h>
+#include                        <ext/pb_ds/assoc_container.hpp>
+using namespace std;
+using namespace __gnu_pbds;
+typedef long long ll;
+typedef pair<int,int> pii;
+typedef pair<ll,ll> pll;
+#define pb(x)                   push_back(x)
+#define fbo(x)                  find_by_order(x)
+#define ook(x)                  order_of_key(x)
+#define dbg(a)                  cout<< #a <<" --> "<<(a)<<endl;
+#define read                    freopen("input.txt","r",stdin)
+#define write                   freopen("output.txt","w",stdout)
+
+typedef tree<int,null_type,less<int>,
+rb_tree_tag,tree_order_statistics_node_update> pbds;
+
+/*
+    Operations :
+    find_by_order : returns an iterator to the 
+    k-th largest element (counting from zero).
+    *
+    *
+    sample     auto it = st.fbo(x);    cout<<*it;    
+       (*it) is the element at index x (0-based indexing)
+    *
+    * 
+    order_of_key :  returns the number of items in a set 
+    that are strictly smaller than our item.
+    * (returns 0-based index of the element in lowerbound)
+  
+    # to use as a multiset just insert a pair<int,int> with unique second element, change
+    int to pair<int,int> in typedef part
+*/
+
+
+
+
+main(){
+
+
+
+
+
+
+return 0;
+}

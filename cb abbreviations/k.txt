@@ -1,0 +1,56 @@
+#include                        <bits/stdc++.h>
+#include                        <ext/pb_ds/assoc_container.hpp>
+#define lb                      lower_bound
+#define ub                      upper_bound
+#define fe(x)                   *(x.begin())
+#define le(x)                   *(x.rbegin())
+#define pb                      push_back
+#define load(node,n)            bool operator < (const node &n) const
+#define fbo(x)                  find_by_order(x)
+#define ook(x)                  order_of_key(x)
+#define all(x)                  (x).begin(),(x).end()
+#define FOR(i,n)                for(int i = 1; i<=n; i++)
+#define REP(i,n)                for(int i = 0; i<n;  i++)
+#define TT                      int TC;  scanf("%d",&TC);  while(TC--)
+#define read                    freopen("input.txt","r",stdin)
+#define write                   freopen("output.txt","w",stdout)
+#define dbg(...)                debug_out(vec_splitter(#__VA_ARGS__), 0, __LINE__, __VA_ARGS__)
+#define set(x)                  tree<x,null_type,less<x>,rb_tree_tag,tree_order_statistics_node_update>
+using                           namespace __gnu_pbds;
+using                           namespace std;
+typedef                         long long ll;
+typedef                         pair<ll,ll> pll;
+typedef                         pair<int,int> pii;
+
+vector<string> vec_splitter(string s){
+    s += ','; vector<string> res;
+    while(!s.empty()) res.push_back(s.substr(0,s.find(','))), s = s.substr(s.find(',') + 1);
+    return res;
+}
+void debug_out(
+vector<string> __attribute__ ((unused)) args,
+__attribute__ ((unused))int idx,
+__attribute__ ((unused)) int LINE_NUM) { cerr << endl; }
+template <typename Head, typename... Tail>
+void debug_out(vector<string> args, int idx, int LINE_NUM, Head H, Tail... T){
+    if(idx > 0) cerr << ", "; else cerr << "Line(" << LINE_NUM << ") "; stringstream ss; ss << H;
+    cerr << args[idx] << " = " << ss.str(); debug_out(args, idx + 1, LINE_NUM, T...);
+}
+
+
+
+
+
+
+main(){
+//read;
+
+|
+
+
+
+
+
+
+return 0;
+}

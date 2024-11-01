@@ -1,0 +1,41 @@
+struct Hash{
+    ll b1 = 509,b2 = 919,sz;
+    string s;
+    vector<ll> pow1,pow2,h1,h2,Rh1,Rh2;
+    ll mod1 = 998244353ll,mod2 = 100030001ll;
+    Hash(string p){
+        pow1.clear(); pow2.clear(); h1.clear(); h2.clear(); s = p; sz = s.size();
+        pow1.pb(1); pow2.pb(1);
+        for(ll i = 1 ; i < sz+2 ; i++){
+            pow1.pb((1ll*pow1[i-1]*b1)%mod1);
+            pow2.pb((1ll*pow2[i-1]*b2)%mod2);
+        }
+        h1.pb(s[0]); h2.pb(s[0]);
+        Rh1 = vector<ll>(sz+2,0);
+        Rh1[sz-1] = s[sz-1];    Rh2 = Rh1;
+        for(ll i = 1,j = sz-2; i<sz ; i++,j--){
+            h1.pb((1ll*h1.back()*b1 + s[i])%mod1);
+            h2.pb((1ll*h2.back()*b2 + s[i])%mod2);
+            Rh1[j] = (1ll*Rh1[j+1]*b1 + s[j])%mod1;
+            Rh2[j] = (1ll*Rh2[j+1]*b2 + s[j])%mod2;
+        }
+    }
+    pll query(ll i, ll j){
+        pll res = make_pair(h1[j],h2[j]) ;
+        if(i>0)
+        res = make_pair((res.first-1ll*h1[i-1]*pow1[j-i+1])%mod1,(res.second-1ll*h2[i-1]*pow2[j-i+1])%mod2 ) ;
+        res = make_pair((res.first%mod1+mod1)%mod1,(res.second%mod2+mod2)%mod2);
+        return res;
+    }
+    pll Rquery(ll i,ll j){
+        pll res = make_pair(Rh1[i],Rh2[i]) ;
+        if(j==sz-1) return res;
+        res = {(Rh1[i] - 1ll*Rh1[j+1]*pow1[j-i+1])%mod1,(Rh2[i] - 1ll*Rh2[j+1]*pow2[j-i+1])%mod2};
+        res = {(res.first%mod1+mod1)%mod1,(res.second%mod2+mod2)%mod2};
+        return res;
+    }
+    bool isPalin(ll i,ll j){
+        if(i>j) return false;
+        return query(i,j)==Rquery(i,j);
+    }
+};

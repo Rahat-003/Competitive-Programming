@@ -1,0 +1,32 @@
+const ll P = 1e9 + 7; |
+
+// call init in the main function
+
+vector<ll> fct,inv;
+
+ll bigmod(ll n,ll p,ll m){
+    if(p==0)    return 1;
+    if(p==1)    return n%m;
+    ll x = bigmod(n,p/2,m)%m;
+    if(p%2==0)  return (x*x)%m;
+    return (((x*x)%m)*(n%m))%m;
+}
+
+void init(){
+    ll n = 500000;
+    fct = vector<ll> (n+5);
+    inv = fct;
+    fct[0] = 1;
+    for(ll i = 1; i<=n; i++)
+        fct[i] = (i*fct[i-1])%P;
+    inv[n] = bigmod(fct[n],P-2,P);
+    for(ll i = n-1; i>=0; i--){
+        inv[i] = (inv[i+1]*(i+1))%P;
+    }
+}
+
+ll ncr(ll n,ll r){
+    if(n<r) return 0;
+    ll a = fct[n],b = inv[r],c = inv[n-r];
+    return (((a*b)%P)*c)%P;
+}

@@ -1,0 +1,21 @@
+|
+struct BIT{
+    int SIZE;   vector<int> TREE;
+
+    BIT(int N){
+        SIZE = N;
+        TREE = vector<int> (N+2,0);
+    }
+    void add(int i,int val){
+        for(; i<=SIZE ; i+=i&-i)  TREE[i]+=val;
+    }
+    void update(int l, int r, int val) {
+        add(l,val);
+        add(r+1,-val);
+    }
+    int query(int i) {
+        int sum = 0;
+        for (; i ; i-=i&-i )   sum+= TREE[i];
+        return sum;
+    }
+};

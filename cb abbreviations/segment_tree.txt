@@ -1,0 +1,51 @@
+|
+struct node{
+    int max_val,min_val,sum;
+    node(){};
+    node(int a,int b,int c){    max_val = a;    min_val = b;  sum = c; }
+};
+
+namespace segment_tree{
+    int N;
+    struct sample{
+        vector<node> TREE;  vector<int> lazy;
+        sample(int SIZE){
+            N = SIZE;
+            TREE = vector<node> (4*N+2,node(0,0,0));
+            lazy = vector<int> (4*N+2,0);
+        }
+
+        void relax(int n,int l,int r){
+            int L = n<<1,R = L+1,m = l+r>>1;
+            if(lazy[n]==0)  return;
+            TREE[n].sum+=(r-l+1)*lazy[n];
+            TREE[n].max_val+=lazy[n];
+            TREE[n].min_val+=lazy[n];
+            if(l!=r)    lazy[L]+=lazy[n],lazy[R]+=lazy[n];
+            lazy[n] = 0;
+        }
+        void update(int ql,int qr,int x,int n = 1,int l = 1,int r = N){
+            relax(n,l,r);
+            int L = n<<1,R = L+1, m = l+r>>1;
+            if(r<ql || qr<l)    return;
+            if(ql<=l && r<=qr){
+                lazy[n]+=x;
+                relax(n,l,r);
+                return;
+            }
+            update(ql,qr,x,L,l,m);
+            update(ql,qr,x,R,m+1,r);
+            TREE[n].sum = TREE[L].sum + TREE[R].sum;
+            TREE[n].max_val = max(TREE[L].max_val,TREE[R].max_val);
+            TREE[n].min_val = min(TREE[L].min_val,TREE[R].min_val);
+        }
+        node query(int ql,int qr,int n = 1,int l = 1,int r = N){
+            relax(n,l,r);
+            int L = n<<1,R = L+1, m = l+r>>1;
+            if(r<ql || qr<l)    return node(-1000000000,1000000000,0);
+            if(ql<=l && r<=qr)  return TREE[n];
+            node a = query(ql,qr,L,l,m),b = query(ql,qr,R,m+1,r);
+            return node(max(a.max_val,b.max_val),min(a.min_val,b.min_val),a.sum+b.sum);
+        }
+    };
+}

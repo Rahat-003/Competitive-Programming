@@ -1,0 +1,89 @@
+
+|
+struct node{
+    int min_val,max_val,sum,min_cnt,max_cnt;
+    node(){};
+    node(int a,int b,int c,int d,int e){
+        min_val = a,max_val = b,sum = c,min_cnt = d,max_cnt = e;
+    }
+};
+
+namespace segment_tree{
+    int N;
+    struct sample{
+        vector<node> tr;  vector<int> lazy;
+        void build(int n = 1,int l = 1,int r = N){
+            int L = 2*n,R = L+1,m = l+r>>1;
+            if(l==r){
+                tr[n] = {0,0,0,1,1};
+                return;
+            }
+            build(L,l,m);
+            build(R,m+1,r);
+            tr[n].sum = tr[L].sum + tr[R].sum;
+            tr[n].min_val = min(tr[L].min_val,tr[R].min_val);
+            tr[n].max_val = max(tr[L].max_val,tr[R].max_val);
+            if(tr[L].min_val==tr[R].min_val)    tr[n].min_cnt = tr[L].min_cnt + tr[R].min_cnt;
+            else tr[n].min_cnt = (tr[L].min_val<tr[R].min_val ? tr[L].min_cnt : tr[R].min_cnt);
+            if(tr[L].max_val==tr[R].max_val)    tr[n].max_cnt = tr[L].max_cnt + tr[R].max_cnt;
+            else tr[n].max_cnt = (tr[L].max_val>tr[R].max_val ? tr[L].max_cnt : tr[R].max_cnt);
+        }
+
+        sample(int SIZE){
+            N = SIZE;
+            tr = vector<node> (4*N+1,node(0,0,0,1,1));
+            lazy = vector<int> (4*N+1,0);
+            build();
+        }
+        
+        void relax(int n,int l,int r){
+            int L = 2*n,R = L+1, m = l+r>>1;
+            if(l==r)    tr[n].min_cnt = 1,tr[n].max_cnt = 1;
+            if(lazy[n]==0)  return;
+            tr[n].sum+=(r-l+1)*lazy[n];
+            tr[n].min_val+=lazy[n];
+            tr[n].max_val+=lazy[n];
+            if(l!=r){
+                lazy[L]+=lazy[n];
+                lazy[R]+=lazy[n];
+            }
+            lazy[n] = 0;
+        }
+
+        void update(int ql,int qr,int val,int n = 1,int l = 1,int r = N){
+            int L = 2*n,R = L+1, m = l+r>>1;
+            relax(n,l,r);
+            if(ql>qr || r<ql || qr<l)    return;
+            if(ql<=l && r<=qr){
+                lazy[n]+=val;
+                relax(n,l,r);
+                return;
+            }
+            update(ql,qr,val,L,l,m);
+            update(ql,qr,val,R,m+1,r);
+            tr[n].sum = tr[L].sum + tr[R].sum;
+            tr[n].min_val = min(tr[L].min_val,tr[R].min_val);
+            tr[n].max_val = max(tr[L].max_val,tr[R].max_val);
+            if(tr[L].min_val==tr[R].min_val)    tr[n].min_cnt = tr[L].min_cnt + tr[R].min_cnt;
+            else tr[n].min_cnt = (tr[L].min_val<tr[R].min_val ? tr[L].min_cnt : tr[R].min_cnt);
+            if(tr[L].max_val==tr[R].max_val)    tr[n].max_cnt = tr[L].max_cnt + tr[R].max_cnt;
+            else tr[n].max_cnt = (tr[L].max_val>tr[R].max_val ? tr[L].max_cnt : tr[R].max_cnt);
+        }
+
+        node query(int ql,int qr,int n = 1,int l = 1,int r = N){
+            relax(n,l,r);
+            int L = 2*n,R = L+1, m = l+r>>1;
+            if(ql>qr || r<ql || qr<l)   return node(1e9,-1e9,0,0,0);
+            if(ql<=l && r<=qr)  return tr[n];
+            node x = query(ql,qr,L,l,m),y = query(ql,qr,R,m+1,r);
+            int a,b;
+            if(x.min_val==y.min_val)    a = x.min_cnt + y.min_cnt;
+            else    a = (x.min_val<y.min_val ? x.min_cnt : y.min_cnt);
+            if(x.max_val==y.max_val)    b = x.max_cnt + y.max_cnt;
+            else    b = (x.max_val>y.max_val ? x.max_cnt : y.max_cnt);
+            return node(min(x.min_val,y.min_val),max(x.max_val,y.max_val),x.sum+y.sum,a,b);
+        }
+    };
+}
+
+

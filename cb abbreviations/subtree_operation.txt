@@ -1,0 +1,145 @@
+#define mx 200003
+|
+vector<ll> v[mx];
+
+ll sub[mx],id[mx],cnt,dis[mx];
+
+/// call dfs(1,0) inside main
+
+void dfs(ll u,ll a){
+    sub[u] = 1;
+    id[u] = ++cnt;
+    dis[cnt] = u;
+    for(auto i:v[u]){
+        if(i==a)    continue;
+        dfs(i,u);
+        sub[u]+=sub[i];
+    }
+}
+
+/********************************************SEGMENT_TREE*********************************************************
+
+
+struct node{
+    ll max_val,min_val,sum;
+    node(){};
+    node(ll a,ll b,ll c){    max_val = a;    min_val = b;  sum = c; }
+};
+
+namespace segment_tree{
+    ll N;
+    struct sample{
+        vector<node> TREE;  vector<ll> lazy;
+///     SIZE declaration
+        sample(ll SIZE = 200005){
+            N = SIZE;
+            TREE = vector<node> (4*N+2,node(0,0,0));
+            lazy = vector<ll> (4*N+2,0);
+        }
+
+        void relax(ll n,ll l,ll r){
+            ll L = n<<1,R = L+1,m = l+r>>1;
+            if(lazy[n]==0)  return;
+            TREE[n].sum+=(r-l+1)*lazy[n];
+            TREE[n].max_val+=lazy[n];
+            TREE[n].min_val+=lazy[n];
+            if(l!=r)    lazy[L]+=lazy[n],lazy[R]+=lazy[n];
+            lazy[n] = 0;
+        }
+        void update(ll ql,ll qr,ll x,ll n = 1,ll l = 1,ll r = N){
+            relax(n,l,r);
+            ll L = n<<1,R = L+1, m = l+r>>1;
+            if(r<ql || qr<l)    return;
+            if(ql<=l && r<=qr){
+                lazy[n]+=x;
+                relax(n,l,r);
+                return;
+            }
+            update(ql,qr,x,L,l,m);
+            update(ql,qr,x,R,m+1,r);
+            TREE[n].sum = TREE[L].sum + TREE[R].sum;
+            TREE[n].max_val = max(TREE[L].max_val,TREE[R].max_val);
+            TREE[n].min_val = min(TREE[L].min_val,TREE[R].min_val);
+        }
+        node query(ll ql,ll qr,ll n = 1,ll l = 1,ll r = N){
+            relax(n,l,r);
+            ll L = n<<1,R = L+1, m = l+r>>1;
+            if(r<ql || qr<l)    return node(-1e9,1e9,0);
+            if(ql<=l && r<=qr)  return TREE[n];
+            node a = query(ql,qr,L,l,m),b = query(ql,qr,R,m+1,r);
+            return node(max(a.max_val,b.max_val),min(a.min_val,b.min_val),a.sum+b.sum);
+        }
+    } ;
+
+}
+
+segment_tree::sample X;
+
+void upd(ll NODE,ll val){
+    ll p = id[NODE];
+    X.update(p,p + sub[NODE] - 1, val);
+}
+
+node qry(ll NODE){
+//  returns the value at NODE
+    return X.query(id[NODE],id[NODE]);
+
+//  returns the sum/max/min of values of subtree NODE
+    return X.query(id[NODE],id[NODE] + sub[NODE] - 1);
+
+}
+
+******************************************************************************************************************/
+
+
+
+
+/**************************************************FENWICK_TREE*******************************************************
+struct BIT{
+    int SIZE;
+    vector<int> TREE1,TREE2;
+
+/// SIZE DECLARATION
+
+    BIT(int N = 200005){
+        SIZE = N;
+        TREE1 = vector<int> (SIZE+5,0);    TREE2 = TREE1;
+    }
+
+    void add(vector<int> &ar,int i,int val){
+        for(;i<=SIZE;i+=i&-i)  ar[i]+=val;
+    }
+    void update(int l,int r,int val){
+        add(TREE1,l,val);       add(TREE1,r+1,-val);
+        add(TREE2,l,(l-1)*val); add(TREE2,r+1,-r*val);
+    }
+    int prefix_sum(vector<int> &ar,int i){
+        int tot = 0;    for(;i;i-=i&-i) tot+=ar[i];
+        return tot;
+    }
+    int sum(int i){ return prefix_sum(TREE1,i)*i - prefix_sum(TREE2,i); }
+    int query(int l,int r){
+        if(l<=0)     l = 1;
+        if(r<l)      return 0;
+        return sum(r)-sum(l-1);
+    }
+} X;
+
+void upd(int x,int val){
+    int p = id[x];
+    X.update(p,p+sub[x]-1,val);
+}
+
+int qry(int NODE){
+
+//  returns the value at NODE
+    return X.query(id[NODE],id[NODE]);
+
+//  returns the sum of values of subtree NODE
+    return X.query(id[NODE],id[NODE] + sub[NODE] - 1);
+
+}
+
+//***************************************************************************************************************/
+
+

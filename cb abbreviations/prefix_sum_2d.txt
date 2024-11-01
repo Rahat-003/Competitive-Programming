@@ -1,0 +1,10 @@
+int pref[mx][mx]; |
+
+int query(int a,int b,int c,int d){
+    return pref[c][d] + pref[a-1][b-1] - pref[a-1][d] - pref[c][b-1];
+/*
+    when cin the input ar[mx][mx], do the following
+    cin>>ar[i][j];
+    pref[i][j] = ar[i][j] - query(i,j,i,j);
+*/
+}

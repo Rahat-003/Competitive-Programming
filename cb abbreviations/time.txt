@@ -1,0 +1,50 @@
+#include                        <bits/stdc++.h>
+#include                        <ext/pb_ds/assoc_container.hpp>
+#define lb                      lower_bound
+#define ub                      upper_bound
+#define pb(x)                   push_back((x))
+#define pb2(x,y)                push_back({x,y})
+#define pb3(x,y,z)              push_back({x,y,z})
+#define load(node,n)            bool operator < (const node &n) const
+#define fbo(x)                  find_by_order(x)
+#define ook(x)                  order_of_key(x)
+#define all(x)                  (x).begin(),(x).end()
+#define FOR(i,n)                for(int i = 1; i<=n; i++)
+#define REP(i,n)                for(int i = 0; i<n;  i++)
+#define dbg(a)                  cout<<#a <<" --> "<<(a)<<endl;
+#define TT                      int TC;  scanf("%d",&TC);  while(TC--)
+#define read                    freopen("input.txt","r",stdin)
+#define write                   freopen("output.txt","w",stdout)
+#define set(x)                  tree<x,null_type,less<x>,rb_tree_tag,tree_order_statistics_node_update>
+using                           namespace std;
+using                           namespace __gnu_pbds;
+typedef                         long long ll;
+typedef                         pair<ll,ll> pll;
+typedef                         pair<int,int> pii;
+
+
+
+
+
+main(){
+#ifndef ONLINE_JUDGE
+read;
+write;
+#endif
+
+
+
+
+
+
+
+
+
+
+
+#ifndef ONLINE_JUDGE
+printf("\n\nTime Elapsed: %.3f sec\n",1.0*clock() / CLOCKS_PER_SEC);
+#endif
+
+return 0;
+}
